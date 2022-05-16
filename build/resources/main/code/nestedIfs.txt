@@ -1,5 +1,5 @@
 true:if ((false) && (true)) {
-  // ...
+  System.out.println("FLAG!");
 } else if (true) {
   System.out.println("FLAG!");
 }#
@@ -8,5 +8,20 @@ true:if (true) {
 } else if (false) {
   System.out.println("FLAG!");
 } else if (true) {
+  System.out.println("FLAG!");
+}#
+false:if (true && false) {
+  System.out.println("FLAG!");
+} else if (false) {
+  System.out.println("FLAG!");
+}#
+false:if (true && false) {
+  System.out.println("FLAG!");
+} else if (false && false) {
+  System.out.println("FLAG!");
+}#
+true:if (true && true) {
+  System.out.println("FLAG!");
+} else if (false && false) {
   System.out.println("FLAG!");
 }

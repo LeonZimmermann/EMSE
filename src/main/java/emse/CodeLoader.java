@@ -34,7 +34,7 @@ public class CodeLoader {
             List<CodeSample> result = new ArrayList<>();
             for (int i = 0; i < arrayOfCodeSamples.size(); i++) {
                 final var resultCodePair = arrayOfCodeSamples.get(i).split(":");
-                final boolean printing = Boolean.parseBoolean(resultCodePair[0]);
+                final boolean printing = Boolean.parseBoolean(resultCodePair[0].trim());
                 final String code = resultCodePair[1];
                 result.add(new CodeSample(i, method, code, printing));
             }

@@ -13,7 +13,7 @@ public class DatapointWriter {
         try (FileWriter writer = new FileWriter(OUTPUT_FILE, true)) {
             writer.append(String.valueOf(datapoint.method.ordinal())).append(";")
                     .append(String.valueOf(datapoint.timeInMillis)).append(";")
-                    .append(String.valueOf(datapoint.correct))
+                    .append(datapoint.correct ? "1" : "0")
                     .append("\n")
                     .flush();
         } catch (IOException e) {
