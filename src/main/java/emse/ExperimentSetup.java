@@ -89,9 +89,10 @@ public class ExperimentSetup extends JFrame {
 
     private void next(boolean printedAnswer) {
         final Method method = currentCodeSample.method;
+        final int codeSample = currentCodeSample.id;
         final long timePassed = timeTracker.getTimePassed();
         final boolean correct = printedAnswer == currentCodeSample.printing;
-        final Datapoint datapoint = new Datapoint(method, timePassed, correct);
+        final Datapoint datapoint = new Datapoint(method, codeSample, timePassed, correct);
 
         datapointWriter.writeDatapoint(datapoint);
 

@@ -2,4 +2,11 @@ true:if ((false) && (true)) {
   // ...
 } else if (true) {
   System.out.println("FLAG!");
+}#
+true:if (true) {
+  System.out.println("FLAG!");
+} else if (false) {
+  System.out.println("FLAG!");
+} else if (true) {
+  System.out.println("FLAG!");
 }

@@ -3,6 +3,7 @@ package emse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -28,13 +29,16 @@ public class CodeLoader {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(url)))) {
             var arrayOfCodeSamples = Arrays.stream(reader.lines()
                     .collect(Collectors.joining("\n"))
-                    .split("#"));
-            return arrayOfCodeSamples.map(it -> {
-                final var resultCodePair = it.split(":");
+                    .split("#"))
+                    .collect(Collectors.toList());
+            List<CodeSample> result = new ArrayList<>();
+            for (int i = 0; i < arrayOfCodeSamples.size(); i++) {
+                final var resultCodePair = arrayOfCodeSamples.get(i).split(":");
                 final boolean printing = Boolean.parseBoolean(resultCodePair[0]);
                 final String code = resultCodePair[1];
-                return new CodeSample(method, code, printing);
-            }).collect(Collectors.toList());
+                result.add(new CodeSample(i, method, code, printing));
+            }
+            return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

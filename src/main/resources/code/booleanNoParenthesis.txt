@@ -1,3 +1,6 @@
 true:if ((true) || (false) && (true)) {
   System.out.println("FLAG!");
+}#
+true:if ((true) || (false) || (true)) {
+  System.out.println("FLAG!");
 }
