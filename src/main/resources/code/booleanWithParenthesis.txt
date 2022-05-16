@@ -12,4 +12,13 @@ false:if ((true && false) || (false && false)) {
 }#
 true:if ((true && true) || (false && false)) {
   System.out.println("FLAG!");
+}#
+true:if ((true && false) || (false && false) || true) {
+  System.out.println("FLAG!");
+}#
+true:if ((true && false) || (false && false && true) || true) {
+  System.out.println("FLAG!");
+}#
+false:if ((true && false) || (false && false) && (true || true)) {
+  System.out.println("FLAG!");
 }
