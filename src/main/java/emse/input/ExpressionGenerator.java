@@ -56,9 +56,7 @@ public class ExpressionGenerator {
         final List<List<Boolean>> expressionData = new ArrayList<>();
         final int numberOfConjunctionsToRead = determineNumberOfConjuctionsToRead(numberOfConjunctions, expressionResultIsTrue);
         generateConjunctionsThatHaveToBeRead(expressionData, complexity, expressionResultIsTrue, numberOfConjunctionsToRead);
-        if (expressionResultIsTrue) {
-            generateRedundancies(expressionData, complexity, numberOfConjunctions, numberOfParameters);
-        }
+        generateRedundancies(expressionData, complexity, numberOfConjunctions, numberOfParameters);
         final String expressionString = convertExpressionDataToExpressionString(expressionData, method);
         return new Expression(expressionGenerationParameters, expressionResultIsTrue, expressionString);
     }

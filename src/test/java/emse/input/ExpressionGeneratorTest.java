@@ -30,6 +30,7 @@ public class ExpressionGeneratorTest {
 
     @BeforeClass
     public static void setup() throws IOException {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%4$s: %5$s %n");
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yMdHms");
         final String timestamp = dateFormat.format(Date.from(Instant.now()));
         final String path = "logs/ExpressionGeneratorTest-" + timestamp;
@@ -38,7 +39,6 @@ public class ExpressionGeneratorTest {
             throw new IOException("Cannot write logs to file");
         }
         final FileHandler fileHandler = new FileHandler(path);
-        fileHandler.setFormatter(new SimpleFormatter());
         logger.addHandler(fileHandler);
     }
 
