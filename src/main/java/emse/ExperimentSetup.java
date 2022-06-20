@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -32,7 +33,7 @@ public class ExperimentSetup extends JFrame {
 
     private final JPanel panel;
     private RSyntaxTextArea textArea;
-
+    private final JCheckBox withParenthesisCheckbox;
 
     public ExperimentSetup() {
 
@@ -40,6 +41,8 @@ public class ExperimentSetup extends JFrame {
 
 
         JPanel preview = new JPanel(new BorderLayout());
+        withParenthesisCheckbox = new JCheckBox("With Parenthesis?");
+        preview.add(withParenthesisCheckbox, BorderLayout.PAGE_START);
         final JButton startButton = new JButton("Start");
         startButton.addActionListener(event -> {
             panel.removeAll();
@@ -50,7 +53,7 @@ public class ExperimentSetup extends JFrame {
             setLocationRelativeTo(null);
             start();
         });
-        preview.add(startButton);
+        preview.add(startButton, BorderLayout.CENTER);
         panel.add(preview);
         setContentPane(panel);
 
@@ -62,7 +65,7 @@ public class ExperimentSetup extends JFrame {
     }
 
     private void addTextAreaTo(final JPanel panel) {
-        textArea = new RSyntaxTextArea(20, 60);
+        textArea = new RSyntaxTextArea(20, 200);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
         textArea.setCodeFoldingEnabled(true);
         textArea.setEditable(false);
@@ -74,29 +77,37 @@ public class ExperimentSetup extends JFrame {
     private void addButtonPanelTo(final JPanel panel) {
         JPanel buttonPanel = new JPanel(new GridBagLayout());
 
-        final JButton notPrintedButton = new JButton("Not Printed");
-        notPrintedButton.addActionListener(event -> next(false));
-        buttonPanel.add(notPrintedButton);
+        final JButton falseButton = new JButton("False");
+        falseButton.addActionListener(event -> next(false));
+        buttonPanel.add(falseButton);
 
-        final JButton printedButton = new JButton("Printed");
-        printedButton.addActionListener(event -> next(true));
-        buttonPanel.add(printedButton);
+        final JButton trueButton = new JButton("True");
+        trueButton.addActionListener(event -> next(true));
+        buttonPanel.add(trueButton);
 
         panel.add(buttonPanel, BorderLayout.PAGE_END);
     }
 
     private void start() {
+        final Method method = withParenthesisCheckbox.isSelected() ? Method.BOOLEAN_WITH_PARENTHESIS : Method.BOOLEAN_NO_PARENTHESIS;
+        expressionSource.setMethod(method);
         currentExpression = expressionSource.getNext();
         textArea.setText(currentExpression.template.expression);
         timeTracker.reset();
     }
 
-    private void next(boolean printedAnswer) {
-        final int id = currentExpression.id;
-        final Method method = currentExpression.method;
+    private void next(boolean answer) {
         final long timePassed = timeTracker.getTimePassed();
-        final boolean correct = printedAnswer == currentExpression.printing;
-        final Datapoint datapoint = new Datapoint(id, method, complexity, numberOfConjunctions, numberOfParameters, result, timePassed, correct);
+        final boolean correct = answer == currentExpression.template.result;
+        final Datapoint datapoint = new Datapoint(
+                currentExpression.id,
+                currentExpression.template.generationParameters.getMethod(),
+                currentExpression.template.generationParameters.getComplexity(),
+                currentExpression.template.generationParameters.getNumberOfConjunctions(),
+                currentExpression.template.generationParameters.getNumberOfParameters(),
+                currentExpression.template.result,
+                timePassed,
+                correct);
 
         datapointWriter.writeDatapoint(datapoint);
 
