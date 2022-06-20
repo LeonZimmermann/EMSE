@@ -35,6 +35,8 @@ public class ExperimentSetup extends JFrame {
     private RSyntaxTextArea textArea;
     private final JCheckBox withParenthesisCheckbox;
 
+    private boolean firstExecution = true;
+
     public ExperimentSetup() {
 
         panel = new JPanel(new BorderLayout());
@@ -107,7 +109,12 @@ public class ExperimentSetup extends JFrame {
                 currentExpression.template.result,
                 timePassed,
                 correct);
-        datapointWriter.writeDatapoint(datapoint);
+        // Skip first execution to prevent spike in time taken to give an answer
+        if (!firstExecution) {
+            datapointWriter.writeDatapoint(datapoint);
+        } else {
+            firstExecution = false;
+        }
         start();
     }
 
