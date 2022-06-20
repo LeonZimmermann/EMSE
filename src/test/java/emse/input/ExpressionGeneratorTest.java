@@ -13,14 +13,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
-import emse.models.Expression;
 import emse.models.ExpressionGenerationParameters;
+import emse.models.ExpressionTemplate;
 import emse.models.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 
 public class ExpressionGeneratorTest {
@@ -45,32 +43,32 @@ public class ExpressionGeneratorTest {
     @Test
     public void testCreateDisjuntiveNormalformExpression() {
         for (int i = 0; i < 5; i++) {
-            final Expression expression = expressionGenerator.createDisjuntiveNormalformExpression(new ExpressionGenerationParameters().toBuilder()
+            final ExpressionTemplate expressionTemplate = expressionGenerator.createDisjuntiveNormalformExpression(new ExpressionGenerationParameters().toBuilder()
                     .expressionResult(false)
                     .method(Method.BOOLEAN_WITH_PARENTHESIS)
                     .build());
-            logger.info("Generated Expression: " + expression);
+            logger.info("Generated Expression: " + expressionTemplate);
         }
         for (int i = 0; i < 5; i++) {
-            final Expression expression = expressionGenerator.createDisjuntiveNormalformExpression(new ExpressionGenerationParameters().toBuilder()
+            final ExpressionTemplate expressionTemplate = expressionGenerator.createDisjuntiveNormalformExpression(new ExpressionGenerationParameters().toBuilder()
                     .expressionResult(true)
                     .method(Method.BOOLEAN_WITH_PARENTHESIS)
                     .build());
-            logger.info("Generated Expression: " + expression);
+            logger.info("Generated Expression: " + expressionTemplate);
         }
         for (int i = 0; i < 5; i++) {
-            final Expression expression = expressionGenerator.createDisjuntiveNormalformExpression(new ExpressionGenerationParameters().toBuilder()
+            final ExpressionTemplate expressionTemplate = expressionGenerator.createDisjuntiveNormalformExpression(new ExpressionGenerationParameters().toBuilder()
                     .expressionResult(false)
                     .method(Method.BOOLEAN_NO_PARENTHESIS)
                     .build());
-            logger.info("Generated Expression: " + expression);
+            logger.info("Generated Expression: " + expressionTemplate);
         }
         for (int i = 0; i < 5; i++) {
-            final Expression expression = expressionGenerator.createDisjuntiveNormalformExpression(new ExpressionGenerationParameters().toBuilder()
+            final ExpressionTemplate expressionTemplate = expressionGenerator.createDisjuntiveNormalformExpression(new ExpressionGenerationParameters().toBuilder()
                     .expressionResult(true)
                     .method(Method.BOOLEAN_NO_PARENTHESIS)
                     .build());
-            logger.info("Generated Expression: " + expression);
+            logger.info("Generated Expression: " + expressionTemplate);
         }
     }
 
@@ -111,9 +109,6 @@ public class ExpressionGeneratorTest {
                 expressionGenerator.convertExpressionDataToExpressionString(expression, Method.BOOLEAN_WITH_PARENTHESIS));
         assertEquals("false && true && false || true && false || false && false && true && true && true",
                 expressionGenerator.convertExpressionDataToExpressionString(expression, Method.BOOLEAN_NO_PARENTHESIS));
-        assertThatThrownBy(() -> expressionGenerator.convertExpressionDataToExpressionString(expression, Method.NESTED_IF))
-                .hasSameClassAs(new IllegalArgumentException())
-                .hasMessage("This method should not be called for method NESTED_IF");
     }
 
 }

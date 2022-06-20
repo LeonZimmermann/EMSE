@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import emse.models.Expression;
+import emse.models.ExpressionTemplate;
 import emse.models.ExpressionGenerationParameters;
 import emse.models.Method;
 
@@ -35,7 +35,7 @@ public class ExpressionGenerator {
      * @param expressionGenerationParameters generation parameters
      * @return the construct of a boolean expression in disjunctive normal form
      */
-    public Expression createDisjuntiveNormalformExpression(final ExpressionGenerationParameters expressionGenerationParameters) {
+    public ExpressionTemplate createDisjuntiveNormalformExpression(final ExpressionGenerationParameters expressionGenerationParameters) {
 
         final int complexity = expressionGenerationParameters.getComplexity();
         final int numberOfConjunctions = expressionGenerationParameters.getNumberOfConjunctions();
@@ -58,7 +58,7 @@ public class ExpressionGenerator {
         generateConjunctionsThatHaveToBeRead(expressionData, complexity, expressionResultIsTrue, numberOfConjunctionsToRead);
         generateRedundancies(expressionData, complexity, numberOfConjunctions, numberOfParameters);
         final String expressionString = convertExpressionDataToExpressionString(expressionData, method);
-        return new Expression(expressionGenerationParameters, expressionResultIsTrue, expressionString);
+        return new ExpressionTemplate(expressionGenerationParameters, expressionResultIsTrue, expressionString);
     }
 
     private int determineNumberOfConjuctionsToRead(int numberOfConjunctions, boolean expressionResultIsTrue) {
@@ -158,8 +158,6 @@ public class ExpressionGenerator {
         final Collector<CharSequence, ?, String> joiningCollector = switch (method) {
             case BOOLEAN_NO_PARENTHESIS -> Collectors.joining(" && ");
             case BOOLEAN_WITH_PARENTHESIS -> Collectors.joining(" && ", "(", ")");
-            case NESTED_IF ->
-                    throw new IllegalArgumentException("This method should not be called for method NESTED_IF");
         };
         return conjunction.stream().map(Object::toString).collect(joiningCollector);
     }

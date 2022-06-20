@@ -12,9 +12,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import emse.input.CodeLoader;
-import emse.models.CodeSample;
+import emse.input.ExpressionGenerationSource;
+import emse.input.ExpressionSource;
 import emse.models.Datapoint;
+import emse.models.Expression;
+import emse.models.ExpressionGenerationParameters;
 import emse.models.Method;
 import emse.output.DatapointWriter;
 
@@ -22,11 +24,11 @@ public class ExperimentSetup extends JFrame {
 
     private static final String TITLE = "EMSE Experiment";
 
-    private final CodeLoader codeLoader = new CodeLoader();
+    private final ExpressionSource expressionSource = new ExpressionGenerationSource();
     private final TimeTracker timeTracker = new TimeTracker();
     private final DatapointWriter datapointWriter = new DatapointWriter();
 
-    private CodeSample currentCodeSample;
+    private Expression currentExpression;
 
     private final JPanel panel;
     private RSyntaxTextArea textArea;
@@ -84,17 +86,17 @@ public class ExperimentSetup extends JFrame {
     }
 
     private void start() {
-        currentCodeSample = codeLoader.getCodeSample();
-        textArea.setText(currentCodeSample.code);
+        currentExpression = expressionSource.getNext();
+        textArea.setText(currentExpression.template.expression);
         timeTracker.reset();
     }
 
     private void next(boolean printedAnswer) {
-        final Method method = currentCodeSample.method;
-        final int codeSample = currentCodeSample.id;
+        final int id = currentExpression.id;
+        final Method method = currentExpression.method;
         final long timePassed = timeTracker.getTimePassed();
-        final boolean correct = printedAnswer == currentCodeSample.printing;
-        final Datapoint datapoint = new Datapoint(method, codeSample, timePassed, correct);
+        final boolean correct = printedAnswer == currentExpression.printing;
+        final Datapoint datapoint = new Datapoint(id, method, complexity, numberOfConjunctions, numberOfParameters, result, timePassed, correct);
 
         datapointWriter.writeDatapoint(datapoint);
 
