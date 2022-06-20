@@ -17,8 +17,8 @@ import emse.input.ExpressionGenerationSource;
 import emse.input.ExpressionSource;
 import emse.models.Datapoint;
 import emse.models.Expression;
-import emse.models.ExpressionGenerationParameters;
 import emse.models.Method;
+import emse.output.CsvDatapointWriter;
 import emse.output.DatapointWriter;
 
 public class ExperimentSetup extends JFrame {
@@ -26,8 +26,8 @@ public class ExperimentSetup extends JFrame {
     private static final String TITLE = "EMSE Experiment";
 
     private final ExpressionSource expressionSource = new ExpressionGenerationSource();
+    private final DatapointWriter datapointWriter = new CsvDatapointWriter();
     private final TimeTracker timeTracker = new TimeTracker();
-    private final DatapointWriter datapointWriter = new DatapointWriter();
 
     private Expression currentExpression;
 
@@ -38,7 +38,6 @@ public class ExperimentSetup extends JFrame {
     public ExperimentSetup() {
 
         panel = new JPanel(new BorderLayout());
-
 
         JPanel preview = new JPanel(new BorderLayout());
         withParenthesisCheckbox = new JCheckBox("With Parenthesis?");
@@ -108,9 +107,7 @@ public class ExperimentSetup extends JFrame {
                 currentExpression.template.result,
                 timePassed,
                 correct);
-
         datapointWriter.writeDatapoint(datapoint);
-
         start();
     }
 
